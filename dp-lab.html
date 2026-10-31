@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="계단을 오르고 배낭을 채우며 발견하는 동적계획법. 작은 문제의 답을 기억하고 다시 쓰는 수업용 실험실.">
+<title>DP 실험실</title>
+<style>
+:root{--paper:#f5f4ee;--card:#fff;--ink:#173c3a;--muted:#667a76;--line:#dbe4dd;--teal:#14796b;--mint:#e2f1e9;--coral:#db7966;--blue:#397aa7;--gold:#e3b94e;--mono:Consolas,'Cascadia Code',monospace;--sans:'Segoe UI','Malgun Gothic',sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);font:15px/1.6 var(--sans);color:var(--ink)}button,input,select{font:inherit}button{cursor:pointer;color:inherit;border:1px solid var(--line);border-radius:9px;background:#fff;padding:10px 15px;font-weight:650;transition:background .15s,border-color .15s,transform .15s}button:hover:not(:disabled){background:#f0f6f1;border-color:#9db9ad}button:active:not(:disabled){transform:translateY(1px)}button:disabled{opacity:.42;cursor:default}button:focus-visible,input:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #ddaa32;outline-offset:3px}button.primary{background:var(--teal);border-color:var(--teal);color:#fff}button.primary:hover:not(:disabled){background:#0f655a}button.quiet{background:transparent;border-color:transparent;padding:8px;color:var(--muted);font-size:13px}button.small{font-size:13px;padding:7px 11px}input[type=range]{accent-color:var(--teal);width:135px}input[type=number]{border:1px solid #bdcdc3;border-radius:8px;padding:10px 12px;width:100%;min-width:0;font-size:18px}h1,h2,h3,p{margin:0}h2{font-size:21px;line-height:1.45}h3{font-size:17px}p{color:var(--muted)}[hidden]{display:none!important}.shell{max-width:1320px;margin:auto;padding:25px 32px 36px}.brand{display:flex;align-items:center;gap:11px;font-weight:750;letter-spacing:-.5px}.brand-icon{display:flex;align-items:flex-end;gap:3px;width:31px;height:27px}.brand-icon i{width:8px;background:var(--teal);border-radius:2px}.brand-icon i:nth-child(1){height:10px}.brand-icon i:nth-child(2){height:18px}.brand-icon i:nth-child(3){height:26px}.topbar{display:flex;align-items:center;justify-content:space-between}.topbar>span{font:11px var(--mono);letter-spacing:1.4px;color:#7b8e85}.hero{display:flex;justify-content:space-between;align-items:center;padding:27px 0 26px;gap:24px}.eyebrow{font-size:11px;font-weight:750;letter-spacing:1.5px;color:var(--teal);margin-bottom:7px}h1{font-size:37px;line-height:1.3;letter-spacing:-1.8px}h1 span{color:var(--teal)}.hero p{font-size:14px;margin-top:10px}.learning-flow{display:flex;align-items:center;gap:11px;flex-shrink:0}.learning-flow span{display:flex;flex-direction:column;gap:8px;font-size:12px;align-items:center;white-space:nowrap}.learning-flow b{font:18px var(--mono);display:grid;place-items:center;width:40px;height:40px;border:1px solid #b5cdbf;border-radius:12px;background:#e8f0e6;color:var(--teal)}.learning-flow i{font-style:normal;color:#a9b9ad;margin-bottom:22px}.learning-flow span:last-child b{background:var(--teal);color:white}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:22px}.tab{display:flex;align-items:center;text-align:left;gap:13px;padding:15px 18px;border-color:#d0ddd3;background:#eef1e8}.tab[aria-selected=true]{background:var(--ink);color:white;border-color:var(--ink)}.tab[aria-selected=true]:hover{background:#24524e}.tab .tab-number{font:13px var(--mono);opacity:.65}.tab strong{font-size:16px}.tab small{font-weight:400;opacity:.7;margin-left:auto;font-size:12px}.tab .arrow{font-size:20px;margin-left:8px}.lesson-head{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:15px}.lesson-head h2{font-size:21px}.lesson-head p{font-size:14px;margin-top:4px}.setting{display:flex;align-items:center;gap:10px;flex-shrink:0;padding:9px 14px;background:white;border:1px solid var(--line);border-radius:9px;font-size:13px}.setting output{font:700 17px var(--mono);min-width:28px;text-align:right}.columns{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:18px;align-items:start}.panel{background:var(--card);border:1px solid var(--line);border-radius:15px;overflow:hidden;min-width:0}.panel-head{padding:18px 21px 14px;border-bottom:1px solid #e8eee7;display:flex;justify-content:space-between;gap:14px;align-items:center}.panel-title{display:flex;gap:10px;align-items:center}.step-label{font:12px var(--mono);color:var(--teal);background:var(--mint);border-radius:6px;padding:5px 7px}.panel-head small{color:var(--muted);font-size:12px}.panel-body{padding:20px}.instruction{font-size:14px;color:var(--muted);line-height:1.7}.instruction strong{color:var(--ink)}.stair-canvas{margin:8px -4px 2px;background:linear-gradient(#f5f9f4,#fff);border-radius:12px;position:relative}.stair-canvas svg{display:block;width:100%;height:auto}.stair-canvas text{font-family:var(--sans)}.position-pill{position:absolute;top:12px;left:13px;background:white;border:1px solid #d9e6db;border-radius:20px;padding:5px 10px;font-size:12px}.jump-buttons{display:flex;gap:8px;align-items:center}.jump-buttons .jump{flex:1;padding:13px 8px;font-size:16px}.jump-buttons .two{background:#edf3fa;color:#2c608d;border-color:#c7d7e6}.jump-buttons .undo{padding:13px 12px}.key{font:11px var(--mono);border:1px solid currentColor;opacity:.7;border-radius:4px;padding:1px 4px;margin-left:7px}.path-strip{min-height:43px;margin-top:12px;padding:9px 11px;background:#f6f7f2;border-radius:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px}.path-strip .path-label{color:var(--muted);margin-right:3px}.jump-chip{display:inline-grid;place-items:center;min-width:24px;padding:0 5px;height:25px;background:#e0efe8;color:#276f57;border-radius:5px;font:700 12px var(--mono)}.jump-chip.two{background:#e1edf9;color:#34688f}.path-strip .chevron{font-size:12px;color:#9aaca1}.feedback{font-size:14px;line-height:1.7;padding:10px 12px;border-radius:8px;background:#f2f6f0;color:#52695d;margin-top:12px;min-height:44px}.feedback.good{background:#e5f3e8;color:#276746}.feedback.error{background:#fff0e9;color:#9d4831}.feedback.info{background:#edf3f9;color:#385f7e}.sub-actions{display:flex;justify-content:space-between;align-items:center;margin-top:9px;gap:8px}.sub-actions .subtext{font-size:12px;color:var(--muted)}.routes{border-top:1px solid #e7ede5;padding:15px 20px}.routes summary{cursor:pointer;font-size:14px;font-weight:700;display:flex;justify-content:space-between;align-items:center;list-style:none}.routes summary:after{content:'−';font-weight:400;color:var(--muted)}.routes:not([open]) summary:after{content:'+'}.routes summary::-webkit-details-marker{display:none}.route-count{font:12px var(--mono);color:var(--teal);margin-left:6px}.route-filters{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 10px}.route-filters button{font-size:12px;padding:5px 8px;font-weight:500}.route-filters button[aria-pressed=true]{background:#edf4ee;border-color:#7ca88f;color:#236a50}.route-list{display:flex;flex-wrap:wrap;gap:6px;max-height:150px;overflow:auto;padding:3px}.route-card{display:flex;gap:3px;padding:6px;border-radius:7px;background:white}.route-card[aria-pressed=true]{outline:2px solid var(--teal);outline-offset:-2px}.route-empty{font-size:12px;color:#7d8d82;padding:5px 0}.memory-line{display:grid;grid-template-columns:repeat(var(--count),minmax(44px,1fr));gap:5px;min-width:max-content}.memory-wrap{overflow:auto;padding:4px 3px 9px;margin:14px -3px}.memory-cell{padding:7px 5px;min-width:45px;text-align:center;font-weight:500;border-radius:8px;background:#f8f9f5}.memory-cell>span{display:block;font-size:11px;color:var(--muted)}.memory-cell>b{display:block;font:700 20px/1.5 var(--mono);color:#9daaa0}.memory-cell.known{background:#edf5ed;border-color:#c5dac8}.memory-cell.known b{color:#315f45}.memory-cell.current{background:#fff5d6;border:2px solid #d1a33a;padding:6px 4px}.memory-cell.source-one{background:#deefe4;border:2px solid #5c9b7a;padding:6px 4px}.memory-cell.source-two{background:#e4eef9;border:2px solid #729cc2;padding:6px 4px}.mini-legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:11px;margin-top:3px}.mini-legend span{display:inline-flex;align-items:center;gap:4px}.dot{display:inline-block;width:9px;height:9px;border-radius:2px;background:#ffe9ab;border:1px solid #c8a442}.dot.one{background:#deefe4;border-color:#5c9b7a}.dot.two{background:#e4eef9;border-color:#729cc2}.thinking{margin-top:18px;border-radius:12px;background:#f5f8f3;border:1px solid #e1e9de;padding:17px}.thinking h3{font-size:17px;margin-bottom:6px}.thinking p{font-size:13px;line-height:1.7}.sum-sources{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin:14px 0}.source-box{padding:12px 9px;border:1px solid #afcdb9;background:#e8f3eb;border-radius:9px;text-align:center}.source-box.blue{border-color:#bfd1e3;background:#eaf1f9}.source-box span{display:block;font-size:12px;color:#436653}.source-box.blue span{color:#476b8d}.source-box b{display:block;font:700 25px/1.6 var(--mono)}.source-box small{font-size:11px}.sum-plus{font-size:24px;color:#92a598}.answer-form{display:flex;align-items:end;gap:8px}.answer-form label{font-size:12px;flex:1;min-width:0;color:var(--muted)}.answer-form input{margin-top:5px;background:white}.answer-form button{height:49px}.memory-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.memory-actions button{font-size:13px}.insight{margin-top:16px;border-top:1px solid #dde6da;padding-top:13px;font-size:13px;line-height:1.8;color:#5d7367}.insight b{color:var(--teal)}.complete-badge{display:inline-flex;align-items:center;gap:6px;color:#276c4d;background:#e2f1e4;border:1px solid #b5d5bd;border-radius:20px;padding:5px 10px;font-size:12px}.item-shelf{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}.item-card{padding:13px 8px 10px;position:relative;text-align:center;border-width:2px;background:#fffdf9}.item-card[aria-pressed=true]{background:#eaf5ed;border-color:var(--teal)}.item-card .item-icon{margin:0 auto 6px;display:block;width:60px;height:62px}.item-card strong{display:block;font-size:14px}.item-card .item-stats{display:block;font-size:12px;font-weight:400;margin-top:3px;color:#64776c}.item-card .item-stats b{color:#2d4f40;font-weight:750}.item-card .item-state{display:block;margin-top:8px;font-size:11px;color:var(--teal)}.item-key{position:absolute;top:6px;right:7px;font:10px var(--mono);color:#85958c}.bag-display{margin-top:18px;border-radius:12px;background:#f4f7f1;border:1px solid #e0e8dc;overflow:hidden}.bag-heading{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;font-size:13px}.bag-heading strong{font-size:14px}.bag-slots{display:flex;min-height:91px;justify-content:center;align-items:center;gap:10px;padding:8px 16px;background:repeating-linear-gradient(0deg,transparent,transparent 20px,#e7ede31a 20px,#e7ede31a 21px)}.packed-item{display:flex;align-items:center;gap:8px;padding:10px 13px;border-radius:8px;border:1px solid #d4b0a1;background:#f6e2d8;font-size:13px}.packed-item.blue{background:#dceaf5;border-color:#afc7da}.packed-item.gold{background:#f7edce;border-color:#dfcd91}.packed-item b{font-size:18px}.packed-empty{font-size:13px;color:#8b9b8b}.bag-meter{height:8px;background:#dce5d8;margin:0 15px;border-radius:5px;overflow:hidden}.bag-meter>span{display:block;height:100%;background:var(--teal);transition:width .25s}.bag-display.over{border-color:#d9977b;background:#fff4ed}.bag-display.over .bag-meter>span{background:#c76449}.bag-stats{display:flex;align-items:center;justify-content:space-between;padding:12px 15px}.bag-stats span{font-size:12px;color:#6b7c6e}.bag-stats strong{font:700 25px var(--mono);color:var(--ink);margin-left:7px}.bag-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.bag-actions button{font-size:13px;flex:1}.comparison{margin-top:14px;border:1px solid #bad4bf;background:#edf6ed;border-radius:10px;padding:13px}.comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.comparison-grid>div{background:#ffffffa6;padding:10px;border-radius:8px}.comparison span{display:block;font-size:12px;color:#6b7f6f}.comparison strong{font:700 25px var(--mono)}.comparison small{display:block;font-size:12px;color:#58715f}.comparison p{font-size:13px;margin-top:10px}.table-scroll{overflow:auto;margin:14px 0 8px;padding:2px 1px 6px}.dp-table{border-collapse:separate;border-spacing:4px;width:100%;font-size:12px;min-width:390px;table-layout:fixed}.dp-table th{font-weight:500;color:#6a7c70;text-align:center;line-height:1.4}.dp-table th:first-child{width:70px;text-align:left;font-size:11px}.dp-table td{padding:0;text-align:center}.table-cell{padding:8px 2px;min-height:37px;border-radius:6px;width:100%;font:600 14px var(--mono);background:#fafbf7;color:#a2ada4}.table-cell.known{background:#eef4e9;color:#3e6849}.table-cell.source-skip{background:#e1edf9;border:2px solid #5d8fb9;padding:7px 1px;color:#2b5b84}.table-cell.source-take{background:#dceee2;border:2px solid #4e9671;padding:7px 1px;color:#236144}.table-cell.active{background:#fff1bf;border:2px solid #ce9e2a;padding:7px 1px;color:#73540b}.dp-table .fixed-cell{display:block;padding:8px 2px;border-radius:6px;background:#f0f3eb;color:#7b8d7a;font:14px var(--mono);min-height:37px}.dp-table .fixed-cell.source-skip{background:#e1edf9;outline:2px solid #5d8fb9;outline-offset:-2px}.dp-table .fixed-cell.source-take{background:#dceee2;outline:2px solid #4e9671;outline-offset:-2px}.dp-table td .table-cell:disabled{opacity:.65}.table-caption{font-size:11px;color:#7d8d81}.decision-title{font-size:15px;margin:16px 0 4px}.decision-subtitle{font-size:12px;color:var(--muted)}.decisions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.decision{font-weight:400;text-align:left;padding:13px;background:#f1f6fb;border:1px solid #c6d8e5;min-width:0}.decision.take{background:#edf6ee;border-color:#c4dac7}.decision b{display:block;font-size:14px;margin-bottom:7px}.decision .decision-source{font-size:12px;display:block;min-height:42px;line-height:1.65;color:#54718a}.decision.take .decision-source{color:#50745b}.decision .equation{font:700 22px/1.6 var(--mono);display:block;color:#315e7f;margin:7px 0 3px;overflow-wrap:anywhere}.decision.take .equation{color:#2d6c47}.decision .choose-hint{font-size:11px;color:#788c7c;display:block}.decision.best{outline:2px solid #368260;outline-offset:-2px}.decision.unavailable{background:#f3f3ef;border-style:dashed}.decision.unavailable .decision-source{color:#839083}.decision.unavailable .equation{font-size:14px;color:#8b9489}.progress-text{font:11px var(--mono);color:var(--muted);white-space:nowrap}.knowledge{border-top:1px solid #e4ece0;margin-top:15px;padding-top:12px;font-size:13px;color:#667b6a;line-height:1.8}.knowledge b{color:#386c4b}.screen-reader{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.keyboard-hint{font-size:11px;color:#7c8f81;margin-top:8px}.lesson-end{margin-top:18px;padding:14px 18px;border:1px solid #ccdfcf;background:#eaf3e7;border-radius:11px;font-size:14px;color:#426e4e;display:flex;justify-content:space-between;align-items:center;gap:16px}.lesson-end button{flex-shrink:0}.reset-all{font-size:12px;color:#657c6a}
+@media(max-width:1050px){.shell{padding:22px}.learning-flow{gap:8px}.tab small{display:none}h1{font-size:32px}.panel-body{padding:16px}.panel-head{padding:16px}.columns{gap:13px}.bag-actions button{font-size:12px;padding:9px}.sum-sources{gap:6px}.source-box{padding:10px 6px}.item-card{padding:11px 5px}.item-card .item-stats{font-size:11px}.item-card .item-icon{width:52px}.decisions{gap:7px}.decision{padding:10px}.bag-slots{gap:6px;padding:8px}.packed-item{padding:9px;gap:6px}}
+@media(max-width:780px){.shell{padding:18px 14px 28px}.topbar>span{display:none}.hero{padding:24px 0 20px}.hero h1{font-size:29px}.hero p{font-size:13px;max-width:310px}.learning-flow{display:none}.tabs{margin-bottom:20px;gap:7px}.tab{padding:12px;gap:8px}.tab strong{font-size:15px}.tab .arrow{font-size:16px;margin-left:auto}.tab-number{font-size:11px!important}.lesson-head{align-items:flex-start;gap:10px;flex-wrap:wrap}.lesson-head h2{font-size:19px}.lesson-head p{font-size:13px}.setting{width:100%;justify-content:space-between;padding:7px 12px}.setting input{flex:1;max-width:250px}.columns{grid-template-columns:minmax(0,1fr);gap:15px}.panel-head{padding:15px 16px}.panel-head h3{font-size:16px}.panel-body{padding:16px}.stair-canvas{max-width:560px;margin:8px auto}.jump-buttons .jump{font-size:15px}.thinking{padding:14px}.memory-cell{min-width:44px}.memory-wrap{margin-top:12px}.item-card .item-stats{font-size:12px}.item-card .item-icon{width:60px}.item-shelf{gap:8px}.dp-table{min-width:390px}.lesson-end{align-items:flex-start;font-size:13px;flex-direction:column;gap:9px}.routes{padding:14px 16px}.source-box{padding:12px 9px}.decision{padding:12px}.bag-actions button{font-size:13px}}
+.hero{padding:18px 0 21px}.hero h1{font-size:31px;line-height:1.35;word-break:keep-all}.hero p{margin-top:7px}.stair-canvas svg{max-height:220px}
+@media(max-width:780px){.hero h1{font-size:28px}.hero{padding:20px 0}.stair-canvas svg{max-height:none}}
+.item-shelf{grid-template-columns:repeat(4,minmax(0,1fr))}.item-card .item-stats{font-size:12px}.item-card .item-icon{width:64px;height:66px}.bag-slots{flex-wrap:wrap}.packed-item.pearl{background:#f3f0ee;border-color:#d0c8c2}.packed-item.coral{background:#f8e1dd;border-color:#dfa398}.packed-item b{font-size:15px}.table-caption{line-height:1.7}
+@media(max-width:1050px){.item-shelf{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+.topbar{margin-bottom:22px}.topbar h1{font-size:20px;letter-spacing:-.6px}.tab .arrow{margin-left:auto}.sub-actions{justify-content:flex-end}.item-shelf{margin-top:0}.feedback:empty,.choose-hint:empty,#stair-question-sub:empty{display:none}.decision .decision-source{min-height:0}.decision .equation{margin-top:9px}.table-caption{font-size:12px}
+</style>
+</head>
+<body>
+<main class="shell">
+ <header class="topbar"><h1 class="brand"><span class="brand-icon" aria-hidden="true"><i></i><i></i><i></i></span>DP 실험실</h1></header>
+ <div class="tabs" role="tablist" aria-label="실험 선택"><button id="tab-stairs" class="tab" role="tab" aria-selected="true" aria-controls="lesson-stairs" tabindex="0" data-tab="stairs"><span class="tab-number">01</span><strong>계단 오르기</strong><span class="arrow" aria-hidden="true">↗</span></button><button id="tab-bag" class="tab" role="tab" aria-selected="false" aria-controls="lesson-bag" tabindex="-1" data-tab="bag"><span class="tab-number">02</span><strong>배낭 채우기</strong><span class="arrow" aria-hidden="true">↗</span></button></div>
+ <section id="lesson-stairs" role="tabpanel" aria-labelledby="tab-stairs">
+  <div class="lesson-head"><div><h2>계단을 오르는 방법은 몇 가지일까?</h2><p>한 번에 1칸 또는 2칸 · 순서가 다르면 다른 방법</p></div><label class="setting" for="stair-target">목표 계단<input id="stair-target" type="range" min="3" max="10" value="5"><output id="stair-target-value" for="stair-target">5칸</output></label></div>
+  <div class="columns">
+   <section class="panel" aria-labelledby="walk-title"><div class="panel-head"><div class="panel-title"><span class="step-label">01</span><h3 id="walk-title">직접 올라 보기</h3></div><button class="quiet" id="stair-reset">이 실험 초기화 ↺</button></div><div class="panel-body">
+    <div class="stair-canvas"><div id="position-label" class="position-pill"></div><div id="stairs-picture"></div></div>
+    <div class="jump-buttons"><button id="jump-one" class="primary jump">1칸 오르기 <kbd class="key">1</kbd></button><button id="jump-two" class="jump two">2칸 오르기 <kbd class="key">2</kbd></button><button id="undo-jump" class="undo" aria-label="한 걸음 되돌리기" title="한 걸음 되돌리기 · Backspace">↶</button></div>
+    <div id="current-route" class="path-strip" aria-label="현재 경로"></div>
+    <div id="stair-feedback" class="feedback" role="status" aria-live="polite"></div>
+    <div class="sub-actions"><button class="small" id="new-route">새 경로 <kbd class="key">N</kbd></button></div>
+   </div><details class="routes" open><summary><span>내가 발견한 경로 <span id="route-count" class="route-count"></span></span></summary><div class="route-filters" aria-label="마지막 걸음으로 경로 나누기"><button data-filter="all" aria-pressed="true">모두</button><button data-filter="1" aria-pressed="false">마지막에 1칸</button><button data-filter="2" aria-pressed="false">마지막에 2칸</button></div><div id="route-list" class="route-list"></div></details></section>
+   <section class="panel" aria-labelledby="stair-memory-title"><div class="panel-head"><div class="panel-title"><span class="step-label">02</span><h3 id="stair-memory-title">작은 답을 기억하기</h3></div><span id="stair-progress" class="progress-text"></span></div><div class="panel-body">
+    <p class="instruction"><strong>앞의 두 칸의 방법 수를 더하세요.</strong></p>
+    <div class="memory-wrap"><div id="stair-table" class="memory-line" aria-label="계단별 방법의 수"></div></div>
+    <div class="mini-legend"><span><i class="dot"></i>지금 구하는 답</span><span><i class="dot one"></i>1칸 전의 답</span><span><i class="dot two"></i>2칸 전의 답</span></div>
+    <div class="thinking"><h3 id="stair-question"></h3><p id="stair-question-sub"></p><div id="stair-sources" class="sum-sources"></div>
+     <form class="answer-form" id="stair-answer-form"><label for="stair-answer">방법의 수<input type="number" id="stair-answer" min="0" max="1000" step="1" autocomplete="off" inputmode="numeric" placeholder="몇 가지?"></label><button type="submit" class="primary">저장</button></form>
+     <div id="stair-memory-feedback" class="feedback" role="status" aria-live="polite"></div>
+     <div class="memory-actions"><button id="stair-hint" class="small">이 칸 풀이 보기</button><button id="stair-next" class="small primary">다음 빈칸 →</button><button id="stair-fill" class="quiet">끝까지 채워 보기</button></div>
+    </div>
+   </div></section>
+  </div>
+  <div id="stairs-finished" class="lesson-end" hidden><span id="stairs-finished-text"></span><button id="go-bag" class="small primary">이번에는 배낭 채우기 →</button></div>
+ </section>
+ <section id="lesson-bag" role="tabpanel" aria-labelledby="tab-bag" hidden>
+  <div class="lesson-head"><div><h2 id="bag-lesson-title">7kg 배낭의 최대 가치는?</h2><p>보물은 각각 1개 · 쪼개기 불가 · 용량 안에서 최대 가치 찾기</p></div><label class="setting" for="bag-capacity">배낭 용량<input id="bag-capacity" type="range" min="1" max="12" value="7" step="1"><output id="bag-capacity-value" for="bag-capacity">7kg</output></label></div>
+  <div class="columns">
+   <section class="panel" aria-labelledby="pack-title"><div class="panel-head"><div class="panel-title"><span class="step-label">01</span><h3 id="pack-title">내 선택으로 채우기</h3></div><button id="bag-reset" class="quiet">초기화 ↺</button></div><div class="panel-body"><div id="item-shelf" class="item-shelf"></div>
+    <div id="bag-display" class="bag-display"><div class="bag-heading"><strong>나의 배낭</strong><span id="bag-weight-text"></span></div><div id="bag-slots" class="bag-slots"></div><div class="bag-meter" role="meter" id="bag-meter" aria-label="사용한 배낭 무게" aria-valuemin="0"><span id="bag-meter-fill"></span></div><div class="bag-stats"><span>현재 가치<strong id="bag-value"></strong></span><span>내 최고 기록 <b id="bag-best"></b></span></div></div>
+    <div id="bag-feedback" class="feedback" role="status" aria-live="polite"></div><div class="bag-actions"><button id="bag-greedy">무게당 가치순으로 담기</button><button id="bag-compare" class="primary">최적해와 비교</button><button id="bag-clear" class="small">비우기</button></div><div id="bag-comparison" class="comparison" hidden></div>
+   </div></section>
+   <section class="panel" aria-labelledby="bag-memory-title"><div class="panel-head"><div class="panel-title"><span class="step-label">02</span><h3 id="bag-memory-title">비교하고 기억하기</h3></div><span id="bag-progress" class="progress-text"></span></div><div class="panel-body">
+    <p class="instruction"><strong>안 담기와 담기 중 더 큰 가치를 저장하세요.</strong></p><div class="table-scroll" tabindex="0" aria-label="배낭 기억표, 좁은 화면에서는 가로 스크롤"><table class="dp-table" id="bag-table"><caption class="screen-reader">사용할 수 있는 보물과 용량별 최대 가치</caption></table></div><p class="table-caption">행: 해당 보물까지 사용 · 열: 용량 · 값: 최대 가치(억)</p><div class="mini-legend"><span><i class="dot"></i>현재 칸</span><span><i class="dot two"></i>안 담기</span><span><i class="dot one"></i>담기</span></div>
+    <h3 id="bag-question" class="decision-title"></h3><p id="bag-question-sub" class="decision-subtitle"></p><div id="bag-decisions" class="decisions"></div><div id="bag-memory-feedback" class="feedback" role="status" aria-live="polite"></div><div class="memory-actions"><button id="bag-hint" class="small">이 칸 풀이 보기</button><button id="bag-next" class="primary small">다음 빈칸 →</button><button id="bag-fill" class="quiet">끝까지 채워 보기</button></div>
+   </div></section>
+  </div><div id="bag-finished" class="lesson-end" hidden><span id="bag-finished-text"></span><button id="use-optimal" class="small primary">최적 조합을 배낭에 담기</button></div>
+ </section>
+</main>
+<script>
+'use strict';
+const DP = (() => {
+  const ITEMS = [
+    {id:'gold',name:'금괴',key:'1',weight:6,value:13,color:'gold'},
+    {id:'crystal',name:'수정',key:'2',weight:4,value:8,color:'blue'},
+    {id:'ruby',name:'루비',key:'3',weight:3,value:6,color:'coral'},
+    {id:'pearl',name:'진주',key:'4',weight:5,value:12,color:'pearl'}
+  ];
+  function stairs(n){
+    const ways=Array(n+1).fill(0);ways[0]=1;
+    for(let i=1;i<=n;i++)ways[i]=ways[i-1]+(i>1?ways[i-2]:0);
+    return ways;
+  }
+  function routes(n){
+    if(n===0)return [[]];
+    const result=[];
+    for(const jump of [1,2])if(jump<=n)for(const prefix of routes(n-jump))result.push([...prefix,jump]);
+    return result;
+  }
+  function knapsack(items,capacity){
+    const table=Array.from({length:items.length+1},()=>Array(capacity+1).fill(0));
+    for(let i=1;i<=items.length;i++)for(let c=0;c<=capacity;c++){
+      const item=items[i-1];
+      table[i][c]=item.weight<=c?Math.max(table[i-1][c],table[i-1][c-item.weight]+item.value):table[i-1][c];
+    }
+    let c=capacity;const selected=[];
+    for(let i=items.length;i>0;i--)if(table[i][c]>table[i-1][c]){selected.unshift(items[i-1].id);c-=items[i-1].weight;}
+    return {table,selected,value:table[items.length][capacity]};
+  }
+  function greedy(items,capacity){
+    const ordered=[...items].sort((a,b)=>b.value/b.weight-a.value/a.weight);let weight=0,value=0;const selected=[];
+    for(const item of ordered)if(weight+item.weight<=capacity){weight+=item.weight;value+=item.value;selected.push(item.id);}
+    return {selected,weight,value};
+  }
+  function totals(items,selected){return items.filter(item=>selected.includes(item.id)).reduce((sum,item)=>({weight:sum.weight+item.weight,value:sum.value+item.value}),{weight:0,value:0});}
+  function options(items,table,i,c){const item=items[i-1];return {skip:table[i-1][c],take:c>=item.weight?table[i-1][c-item.weight]+item.value:null};}
+  return {ITEMS,stairs,routes,knapsack,greedy,totals,options};
+})();
+if(typeof module!=='undefined')module.exports=DP;
+
+'use strict';
+const $=id=>document.getElementById(id);
+const text=(id,value)=>{$(id).textContent=value;};
+let view='stairs';
+let stair={n:5,path:[],found:[],filter:'all',known:2,focus:3,message:'',tone:'',memory:'',memoryTone:''};
+let bag={capacity:7,selected:[],best:0,shown:false,known:0,focus:0,message:'',tone:'',memory:'',memoryTone:''};
+let bagSolution=DP.knapsack(DP.ITEMS,bag.capacity);
+const stairPosition=()=>stair.path.reduce((sum,jump)=>sum+jump,0);
+const bagCells=()=>DP.ITEMS.flatMap((_,index)=>Array.from({length:bag.capacity},(_,j)=>({i:index+1,c:j+1})));
+const treasureNames=ids=>ids.length?ids.map(id=>DP.ITEMS.find(item=>item.id===id).name).join(' + '):'빈 배낭';
+const chips=path=>path.map(jump=>`<span class="jump-chip ${jump===2?'two':''}">${jump}</span>`).join('<span class="chevron" aria-hidden="true">›</span>');
+function feedback(id,message,tone=''){text(id,message);$(id).className=`feedback ${tone}`;}
+function keepFocus(fn){const id=document.activeElement?.id;fn();if(id&&$(id)&&!$(id).disabled&&document.activeElement.id!==id)$(id).focus({preventScroll:true});}
+function revealCell(container,cell){
+ const bounds=container.getBoundingClientRect(),target=cell.getBoundingClientRect();
+ if(target.right>bounds.right-4)container.scrollLeft+=target.right-bounds.right+4;
+ else if(target.left<bounds.left+4)container.scrollLeft-=bounds.left-target.left+4;
+}
+function setView(next){
+ view=next;
+ for(const name of ['stairs','bag']){$(`lesson-${name}`).hidden=name!==view;$(`tab-${name}`).setAttribute('aria-selected',String(name===view));$(`tab-${name}`).tabIndex=name===view?0:-1;}
+ if(view==='stairs')renderStairs();else renderBag();
+}
+function stairSVG(){
+ const n=stair.n,dx=680/(n+1),rise=Math.min(37,225/n),base=290,positions=[0];
+ stair.path.forEach(jump=>positions.push(positions.at(-1)+jump));
+ const loc=k=>({x:34+k*dx+dx/2,y:base-k*rise-19});
+ const blocks=Array.from({length:n+1},(_,k)=>{
+   const x=34+k*dx,y=base-k*rise,visited=positions.includes(k),goal=k===n;
+   return `<g><rect x="${x}" y="${y}" width="${dx-3}" height="${318-y}" rx="4" fill="${visited?'#cae3d4':goal?'#f6e8bc':'#e7eee3'}" stroke="${goal?'#d4b452':visited?'#82b295':'#cfddcd'}"/><text x="${x+dx/2}" y="${y+23}" text-anchor="middle" fill="#537563" font-size="${k===0?21:28}" font-weight="600">${k===0?'출발':k}</text>${goal?`<text x="${x+dx/2}" y="${y-43}" text-anchor="middle" fill="#947223" font-size="20">목표</text>`:''}</g>`;
+ }).join('');
+ const lines=positions.slice(1).map((k,index)=>{const a=loc(positions[index]),b=loc(k);return `<path d="M ${a.x} ${a.y} Q ${(a.x+b.x)/2} ${Math.min(a.y,b.y)-32} ${b.x} ${b.y}" fill="none" stroke="${stair.path[index]===2?'#6899c0':'#4f9b79'}" stroke-width="3.5" stroke-dasharray="5 4"/>`;}).join('');
+ const dots=positions.map(k=>{const p=loc(k);return `<circle cx="${p.x}" cy="${p.y}" r="5" fill="#fff" stroke="#548c71" stroke-width="2"/>`;}).join('');
+ const p=loc(positions.at(-1));
+ return `<svg viewBox="0 0 760 345" role="img" aria-label="${n}칸 계단. 현재 ${positions.at(-1)}칸. 이동 경로 ${stair.path.length?stair.path.join(', '):'아직 없음'}"><path d="M 28 320 H 738" stroke="#ccdccc" stroke-width="2"/>${blocks}${lines}${dots}<g transform="translate(${p.x},${p.y-1})"><circle cy="-10" r="10" fill="#ecb44c" stroke="#c99636"/><path d="M -11 9 Q 0 -1 11 9 L 8 16 H -8 Z" fill="#227c69"/><circle cx="-3" cy="-11" r="1" fill="#694f24"/><circle cx="3" cy="-11" r="1" fill="#694f24"/></g></svg>`;
+}
+function renderStairs(){keepFocus(()=>{
+ const position=stairPosition(),ways=DP.stairs(stair.n),k=stair.focus;
+ text('stair-target-value',`${stair.n}칸`);$('stair-target').setAttribute('aria-valuetext',`${stair.n}칸`);
+ $('stairs-picture').innerHTML=stairSVG();text('position-label',`${position===stair.n?'도착!':'현재 위치'} ${position} / ${stair.n}칸`);
+ $('jump-one').disabled=position>=stair.n;$('jump-two').disabled=position+2>stair.n;$('undo-jump').disabled=!stair.path.length;
+ $('current-route').innerHTML=`<span class="path-label">나의 걸음</span>${stair.path.length?chips(stair.path):'<span class="route-empty">아직 출발 전</span>'}`;
+ feedback('stair-feedback',stair.message,stair.tone);text('route-count',`${stair.found.length}가지`);
+ document.querySelectorAll('[data-filter]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.filter===stair.filter)));
+ const visible=stair.found.filter(path=>stair.filter==='all'||path.at(-1)===Number(stair.filter));
+ $('route-list').innerHTML=visible.length?visible.map(path=>`<button class="route-card" data-route="${path.join(',')}" aria-label="경로 ${path.join(' 다음 ')} 다시 보기" aria-pressed="${path.join(',')===stair.path.join(',')}">${chips(path)}</button>`).join(''):`<p class="route-empty">${stair.found.length?'이 마지막 걸음으로 도착하는 경로도 찾아보세요.':'목표에 도착하면 여기에 경로가 쌓여요.'}</p>`;
+ text('stair-progress',`${stair.known} / ${stair.n}칸 기억`);
+ $('stair-table').style.setProperty('--count',stair.n);
+ $('stair-table').innerHTML=Array.from({length:stair.n},(_,index)=>{
+   const target=index+1,known=target<=stair.known,cls=target===k?'current':target===k-1?'source-one':target===k-2?'source-two':'';
+   return `<button id="stair-cell-${target}" class="memory-cell ${known?'known':''} ${cls}" data-stair-cell="${target}" ${target>stair.known+1?'disabled':''} aria-label="${target}칸: ${known?ways[target]+'가지':'아직 빈칸'}${target===k?', 지금 살펴보는 칸':''}"><span>${target}칸</span><b>${known?ways[target]:'?'}</b></button>`;
+ }).join('');
+ const base=k<=2,solved=k<=stair.known;
+ text('stair-question',base?`${k}칸은 왜 ${ways[k]}가지일까요?`:`${k}칸에 도착하는 방법은?`);
+ text('stair-question-sub',base?(k===1?'1칸 한 번':'1 + 1 또는 2 → 두 가지'):'');
+ $('stair-sources').hidden=base;
+ if(!base)$('stair-sources').innerHTML=`<div class="source-box"><span>${k-1}칸까지의 방법</span><b>${ways[k-1]}가지</b><small>마지막에 1칸 ↑</small></div><span class="sum-plus" aria-hidden="true">+</span><div class="source-box blue"><span>${k-2}칸까지의 방법</span><b>${ways[k-2]}가지</b><small>마지막에 2칸 ↑</small></div>`;
+ $('stair-answer-form').hidden=solved;
+ $('stair-hint').disabled=solved;$('stair-next').disabled=stair.known>=stair.n||!solved;$('stair-fill').disabled=stair.known>=stair.n;
+ const savedMessage=base?'':`${ways[k-1]} + ${ways[k-2]} = ${ways[k]}가지 · 저장 완료`;
+ feedback('stair-memory-feedback',stair.memory||(solved?savedMessage:''),stair.memoryTone||(solved?'good':''));
+ $('stairs-finished').hidden=stair.known<stair.n;
+ text('stairs-finished-text',`${stair.n}칸까지 ${ways[stair.n]}가지 · 기억표 완성!`);
+ if(view==='stairs')revealCell(document.querySelector('.memory-wrap'),$(`stair-cell-${stair.focus}`));
+});}
+function jump(amount){
+ if(stairPosition()+amount>stair.n)return;
+ stair.path.push(amount);stair.tone='';
+ if(stairPosition()===stair.n){
+   const duplicate=stair.found.some(path=>path.join(',')===stair.path.join(','));
+   if(!duplicate)stair.found.push([...stair.path]);
+   stair.message=duplicate?'이미 찾은 경로예요.':`새 경로 발견! 총 ${stair.found.length}가지`;
+   stair.tone=duplicate?'info':'good';
+ }else stair.message='';
+ renderStairs();
+}
+function newRoute(){stair.path=[];stair.message='';stair.tone='';renderStairs();}
+function undoJump(){if(!stair.path.length)return;stair.path.pop();stair.message='';stair.tone='';renderStairs();}
+function saveStairAnswer(reveal=false){
+ const k=stair.focus;if(k!==stair.known+1)return;
+ const value=$('stair-answer').value.trim(),expected=DP.stairs(stair.n)[k];
+ if(!reveal&&(value===''||!Number.isInteger(Number(value))||Number(value)!==expected)){
+   stair.memory=value===''?'방법의 수를 입력하세요.':'앞의 두 수를 다시 더해 보세요.';stair.memoryTone='error';renderStairs();$('stair-answer').focus();return;
+ }
+ stair.known=k;stair.memory='';stair.memoryTone='';$('stair-answer').value='';renderStairs();
+ if(stair.known<stair.n)$('stair-next').focus({preventScroll:true});
+}
+function resetStairs(n=Number($('stair-target').value)){
+ stair={n,path:[],found:[],filter:'all',known:2,focus:3,message:'',tone:'',memory:'',memoryTone:''};$('stair-answer').value='';renderStairs();
+}
+function itemIcon(item){
+ const art={
+ gold:'<ellipse cx="34" cy="55" rx="29" ry="5" fill="#e9ddb8"/><path d="M5 40 27 31 35 46 7 54Z" fill="#e8b12c" stroke="#bd8821"/><path d="M5 40 27 31 22 26 8 32Z" fill="#ffdf71"/><path d="M29 42 52 33 63 46 36 57Z" fill="#e5ab20" stroke="#bd8821"/><path d="M29 42 52 33 48 27 31 33Z" fill="#ffe48c"/><path d="M18 25 40 16 48 30 21 39Z" fill="#efbf3f" stroke="#b38a23"/><path d="M18 25 40 16 36 11 20 17Z" fill="#ffe69a"/><path d="M21 39 48 30 46 23 23 32Z" fill="#dba324"/>',
+ crystal:'<ellipse cx="35" cy="58" rx="26" ry="4" fill="#e2e8e9"/><path d="M22 53 18 14 29 3 40 23 37 58Z" fill="#e5eff2" stroke="#9cafb7"/><path d="M29 3 29 48 37 58 40 23Z" fill="#b5cbd4"/><path d="M18 14 29 25 29 3Z" fill="#fff"/><path d="M8 42 8 28 20 23 28 50 27 59Z" fill="#c9dce4" stroke="#9cafb7"/><path d="M8 28 20 23 19 43Z" fill="#f6fbff"/><path d="M38 55 43 26 54 20 60 33 53 57Z" fill="#d9e7ec" stroke="#9cafb7"/><path d="M54 20 50 45 53 57 60 33Z" fill="#b5c9d2"/>',
+ ruby:'<ellipse cx="34" cy="58" rx="24" ry="4" fill="#f0dedb"/><path d="M4 25 17 12 49 12 64 25 34 57Z" fill="#d84945" stroke="#a83035" stroke-width="1.5"/><path d="M4 25 24 25 17 12Z" fill="#ef8373"/><path d="M17 12 34 24 24 25Z" fill="#fba99b"/><path d="M17 12 49 12 34 24Z" fill="#f57567"/><path d="M49 12 64 25 44 25Z" fill="#b72635"/><path d="M34 24 49 12 44 25Z" fill="#e55b58"/><path d="M4 25 34 57 24 25Z" fill="#bd2939"/><path d="M24 25 34 57 44 25Z" fill="#ef5b58"/><path d="M44 25 34 57 64 25Z" fill="#9e2032"/>',
+ pearl:'<ellipse cx="35" cy="59" rx="24" ry="4" fill="#dedbd6"/><defs><radialGradient id="pearl-shine" cx="34%" cy="28%" r="72%"><stop stop-color="#fff"/><stop offset=".42" stop-color="#f7f3ee"/><stop offset=".8" stop-color="#d6d0c9"/><stop offset="1" stop-color="#aaa7a4"/></radialGradient></defs><circle cx="34" cy="32" r="25" fill="url(#pearl-shine)" stroke="#d5d1cc"/><ellipse cx="26" cy="22" rx="9" ry="6" transform="rotate(-25 26 22)" fill="#fff" opacity=".8"/>'
+ };
+ return `<svg class="item-icon" viewBox="0 0 68 68" aria-hidden="true">${art[item.id]}</svg>`;
+}
+function renderBag(){keepFocus(()=>{
+ const total=DP.totals(DP.ITEMS,bag.selected),over=total.weight>bag.capacity,cells=bagCells(),active=cells[bag.focus],{i,c}=active,item=DP.ITEMS[i-1],options=DP.options(DP.ITEMS,bagSolution.table,i,c),solved=bag.focus<bag.known;
+ text('bag-capacity-value',`${bag.capacity}kg`);$('bag-capacity').setAttribute('aria-valuetext',`무게 ${bag.capacity}kg까지`);text('bag-lesson-title',`${bag.capacity}kg 배낭의 최대 가치는?`);
+ $('item-shelf').innerHTML=DP.ITEMS.map(item=>`<button id="item-${item.id}" class="item-card" data-item="${item.id}" aria-pressed="${bag.selected.includes(item.id)}" aria-label="${item.name}, 무게 ${item.weight}kg, 가치 ${item.value}억, ${bag.selected.includes(item.id)?'꺼내기':'담기'}"><span class="item-key">${item.key} 키</span>${itemIcon(item)}<strong>${item.name}</strong><span class="item-stats">무게 <b>${item.weight}kg</b> · 가치 <b>${item.value}억</b></span><span class="item-state">${bag.selected.includes(item.id)?'✓ 배낭에 담았어요':'+ 눌러서 담기'}</span></button>`).join('');
+ $('bag-display').classList.toggle('over',over);text('bag-weight-text',`${total.weight} / ${bag.capacity}kg${over?' · 무게 초과':''}`);
+ $('bag-slots').innerHTML=bag.selected.length?DP.ITEMS.filter(item=>bag.selected.includes(item.id)).map(item=>`<span class="packed-item ${item.color}"><b>${item.name}</b><span>${item.weight}kg</span></span>`).join(''):'<span class="packed-empty">어떤 보물을 담아 볼까요?</span>';
+ $('bag-meter-fill').style.width=Math.min(100,total.weight/bag.capacity*100)+'%';$('bag-meter').setAttribute('aria-valuemax',bag.capacity);$('bag-meter').setAttribute('aria-valuenow',Math.min(total.weight,bag.capacity));$('bag-meter').setAttribute('aria-valuetext',`현재 무게 ${total.weight}, 용량 ${bag.capacity}${over?', 용량 초과':''}`);
+ text('bag-value',`${total.value}억`);text('bag-best',`${bag.best}억`);feedback('bag-feedback',over?`${total.weight-bag.capacity}kg 초과 · 보물을 꺼내세요.`:bag.message,over?'error':bag.tone);
+ $('bag-comparison').hidden=!bag.shown;
+ if(bag.shown){const greedy=DP.greedy(DP.ITEMS,bag.capacity),opt=bagSolution;
+   $('bag-comparison').innerHTML=`<div class="comparison-grid"><div><span>무게당 가치순</span><strong>${greedy.value}억</strong><small>${treasureNames(greedy.selected)} · ${greedy.weight}kg</small></div><div><span>최적 조합</span><strong>${opt.value}억</strong><small>${treasureNames(opt.selected)} · ${DP.totals(DP.ITEMS,opt.selected).weight}kg</small></div></div><p>${greedy.value<opt.value?'무게당 가치가 높아도, 최적 조합은 아닐 수 있어요.':'이번 용량에서는 두 결과가 같아요.'}</p>`;
+ }
+ text('bag-progress',`${bag.known} / ${cells.length}칸 기억`);
+ const known=(r,w)=>r===0||w===0||cells.findIndex(cell=>cell.i===r&&cell.c===w)<bag.known;
+ const state=(r,w)=>r===i&&w===c?'active':r===i-1&&w===c?'source-skip':options.take!==null&&r===i-1&&w===c-item.weight?'source-take':'';
+ let table=`<caption class="screen-reader">사용할 수 있는 보물과 용량별 최대 가치, 가치 단위 억</caption><thead><tr><th scope="col">보물 ↓<br>용량 →</th>${Array.from({length:bag.capacity+1},(_,j)=>`<th scope="col">${j}kg</th>`).join('')}</tr></thead><tbody>`;
+ for(let r=0;r<=DP.ITEMS.length;r++){
+   table+=`<tr><th scope="row">${r?DP.ITEMS[r-1].name+'까지':'보물 없음'}</th>`;
+   for(let w=0;w<=bag.capacity;w++){
+     const cls=state(r,w),value=bagSolution.table[r][w];
+     if(r===0||w===0)table+=`<td><span class="fixed-cell ${cls}" title="${r===0?'물건이 없으면':'용량이 0이면'} 가치는 0">0</span></td>`;
+     else {const index=cells.findIndex(cell=>cell.i===r&&cell.c===w),isKnown=known(r,w);table+=`<td><button id="bag-cell-${index}" class="table-cell ${isKnown?'known':''} ${cls}" data-bag-cell="${index}" ${index>bag.known?'disabled':''} aria-label="${DP.ITEMS.slice(0,r).map(item=>item.name).join(', ')}까지, 용량 ${w}kg: ${isKnown?'최대 가치 '+value+'억':'아직 빈칸'}${cls==='active'?', 지금 살펴보는 칸':''}">${isKnown?value:'?'}</button></td>`;}
+   }table+='</tr>';
+ }$('bag-table').innerHTML=table+'</tbody>';$('bag-table').style.minWidth=(84+44*(bag.capacity+1))+'px';
+ text('bag-question',`${item.name}까지 · 용량 ${c}kg`);text('bag-question-sub',`이번 보물: ${item.name} ${item.weight}kg · ${item.value}억`);
+ const best=Math.max(options.skip,options.take??-Infinity);
+ $('bag-decisions').innerHTML=`<button id="choose-skip" class="decision ${solved&&options.skip===best?'best':''}" data-choice="skip"><b>① ${item.name} 안 담기</b><span class="decision-source">이전 행 · ${c}kg의 답</span><span class="equation">${options.skip}억</span><span class="choose-hint">${solved&&options.skip===best?'✓ 최선의 선택':''}</span></button><button id="choose-take" class="decision take ${options.take===null?'unavailable':''} ${solved&&options.take===best?'best':''}" data-choice="take" ${options.take===null?'disabled':''}><b>② ${item.name} 담기</b><span class="decision-source">${options.take===null?`${item.weight}kg > ${c}kg (용량 초과)`:`이전 행 · 남은 ${c} − ${item.weight} = ${c-item.weight}kg의 답 + ${item.name} 가치`}</span><span class="equation">${options.take===null?'담을 수 없음':`${bagSolution.table[i-1][c-item.weight]} + ${item.value} = ${options.take}억`}</span><span class="choose-hint">${solved&&options.take===best?'✓ 최선의 선택':''}</span></button>`;
+ const defaultMessage=solved?`${best}억 저장${options.take===options.skip?' · 같은 값이면 둘 다 정답':''}`:'';
+ feedback('bag-memory-feedback',bag.memory||defaultMessage,bag.memoryTone||(solved?'good':''));
+ $('bag-hint').disabled=solved;$('bag-next').disabled=bag.known>=cells.length||!solved;$('bag-fill').disabled=bag.known>=cells.length;
+ $('bag-finished').hidden=bag.known<cells.length;text('bag-finished-text',`${bag.capacity}kg의 최대 가치 ${bagSolution.value}억 · 기억표 완성!`);
+ if(view==='bag')revealCell(document.querySelector('.table-scroll'),$(`bag-cell-${bag.focus}`));
+});}
+function updateBest(){const total=DP.totals(DP.ITEMS,bag.selected);if(total.weight<=bag.capacity)bag.best=Math.max(bag.best,total.value);}
+function toggleItem(id){
+ bag.selected=bag.selected.includes(id)?bag.selected.filter(item=>item!==id):[...bag.selected,id];updateBest();
+ bag.message='';bag.tone='';renderBag();
+}
+function resetBag(capacity=Number($('bag-capacity').value)){
+ bag={capacity,selected:[],best:0,shown:false,known:0,focus:0,message:'',tone:'',memory:'',memoryTone:''};bagSolution=DP.knapsack(DP.ITEMS,capacity);renderBag();
+}
+function saveBagAnswer(choice,reveal=false){
+ const cells=bagCells();if(bag.focus!==bag.known)return;
+ const {i,c}=cells[bag.focus],options=DP.options(DP.ITEMS,bagSolution.table,i,c),expected=bagSolution.table[i][c];
+ if(!reveal&&options[choice]!==expected){bag.memory='더 큰 가치를 선택하세요.';bag.memoryTone='error';renderBag();return;}
+ bag.known++;bag.memory='';bag.memoryTone='';renderBag();if(bag.known<cells.length)$('bag-next').focus({preventScroll:true});
+}
+for(const tab of document.querySelectorAll('[data-tab]')){
+ tab.addEventListener('click',()=>setView(tab.dataset.tab));
+ tab.addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();setView(event.key==='Home'?'stairs':event.key==='End'?'bag':view==='stairs'?'bag':'stairs');$(`tab-${view}`).focus();}});
+}
+$('stair-target').addEventListener('input',()=>resetStairs());$('stair-reset').addEventListener('click',()=>resetStairs());
+$('jump-one').addEventListener('click',()=>jump(1));$('jump-two').addEventListener('click',()=>jump(2));$('undo-jump').addEventListener('click',undoJump);$('new-route').addEventListener('click',newRoute);
+document.querySelector('.route-filters').addEventListener('click',event=>{const button=event.target.closest('[data-filter]');if(button){stair.filter=button.dataset.filter;renderStairs();}});
+$('route-list').addEventListener('click',event=>{const button=event.target.closest('[data-route]');if(button){stair.path=button.dataset.route.split(',').map(Number);stair.message=`마지막 걸음: ${stair.path.at(-1)}칸`;stair.tone='info';renderStairs();}});
+$('stair-table').addEventListener('click',event=>{const button=event.target.closest('[data-stair-cell]');if(button&&!button.disabled){stair.focus=Number(button.dataset.stairCell);stair.memory='';stair.memoryTone='';$('stair-answer').value='';renderStairs();}});
+$('stair-answer-form').addEventListener('submit',event=>{event.preventDefault();saveStairAnswer();});$('stair-hint').addEventListener('click',()=>saveStairAnswer(true));
+$('stair-next').addEventListener('click',()=>{stair.focus=stair.known+1;stair.memory='';stair.memoryTone='';$('stair-answer').value='';renderStairs();$('stair-answer').focus({preventScroll:true});});
+$('stair-fill').addEventListener('click',()=>{stair.known=stair.n;stair.focus=stair.n;stair.memory='';stair.memoryTone='';renderStairs();});$('go-bag').addEventListener('click',()=>{setView('bag');$('tab-bag').focus();$('lesson-bag').scrollIntoView({block:'start'});});
+$('bag-capacity').addEventListener('input',()=>resetBag());$('bag-reset').addEventListener('click',()=>resetBag());
+$('item-shelf').addEventListener('click',event=>{const button=event.target.closest('[data-item]');if(button)toggleItem(button.dataset.item);});
+$('bag-clear').addEventListener('click',()=>{bag.selected=[];bag.message='';bag.tone='';renderBag();});
+$('bag-greedy').addEventListener('click',()=>{const greedy=DP.greedy(DP.ITEMS,bag.capacity);bag.selected=[...greedy.selected];updateBest();bag.message='무게당 가치순: 진주 → 금괴 → 수정·루비';bag.tone='info';renderBag();});
+$('bag-compare').addEventListener('click',()=>{bag.shown=true;const total=DP.totals(DP.ITEMS,bag.selected);bag.message=total.value===bagSolution.value&&total.weight<=bag.capacity?'최적 조합을 찾았어요!':'';bag.tone='good';renderBag();});
+$('bag-table').addEventListener('click',event=>{const button=event.target.closest('[data-bag-cell]');if(button&&!button.disabled){bag.focus=Number(button.dataset.bagCell);bag.memory='';bag.memoryTone='';renderBag();}});
+$('bag-decisions').addEventListener('click',event=>{const button=event.target.closest('[data-choice]');if(button&&!button.disabled)saveBagAnswer(button.dataset.choice);});
+$('bag-hint').addEventListener('click',()=>saveBagAnswer('',true));$('bag-next').addEventListener('click',()=>{bag.focus=bag.known;bag.memory='';bag.memoryTone='';renderBag();$('choose-skip').focus({preventScroll:true});});
+$('bag-fill').addEventListener('click',()=>{const cells=bagCells();bag.known=cells.length;bag.focus=cells.length-1;bag.memory='';bag.memoryTone='';renderBag();});
+$('use-optimal').addEventListener('click',()=>{bag.selected=[...bagSolution.selected];bag.shown=true;updateBest();bag.message='최적 조합을 담았어요.';bag.tone='good';renderBag();$('pack-title').scrollIntoView({block:'start'});});
+document.addEventListener('keydown',event=>{
+ if(event.ctrlKey||event.metaKey||event.altKey||event.repeat||event.target.closest('input,textarea,select,[contenteditable=true]'))return;
+ const key=event.key.toLowerCase();
+ if(view==='stairs'&&['1','2','n','backspace'].includes(key)){event.preventDefault();if(key==='n')newRoute();else if(key==='backspace')undoJump();else jump(Number(key));}
+ if(view==='bag'&&DP.ITEMS.some(item=>item.key===key)){event.preventDefault();toggleItem(DP.ITEMS.find(item=>item.key===key).id);}
+});
+renderStairs();renderBag();
+
+</script>
+</body>
+</html>
